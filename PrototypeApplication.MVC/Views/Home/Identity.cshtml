@@ -1,0 +1,13 @@
+﻿@model System.Security.Claims.ClaimsPrincipal
+
+<div>
+	<div>@Model.Identity.Name</div>
+
+	Claims ...
+	<ul>
+		@foreach (var claim in @Model.Claims)
+		{
+			<li>@claim.Type: <strong>@claim.Value</strong></li>
+		}
+	</ul>
+</div>
