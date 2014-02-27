@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
@@ -14,23 +15,128 @@ namespace PrototypeApplication.Console
 {
 	class Program
 	{
+		private static RNGCryptoServiceProvider _random;
 		private static WindowsPrincipal _windowsPrincipal;
 
 		static void Main(string[] args)
 		{
+			_random = new RNGCryptoServiceProvider();
 			_windowsPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
 
 			//Program.IdentityDemo();
 			//Program.ClaimsDemo();
 			//Program.ClaimsAuthenticationDemo();
-			Program.ClaimsAuthorizationDemo();
+			//Program.ClaimsAuthorizationDemo();
 			//Program.SessionTokenDemo();
 			//Program.TokenDemo();
+			Program.HMACEncryption();
 
 			System.Console.WriteLine();
 			System.Console.WriteLine("Press any key to continue ...");
 			System.Console.ReadKey();
 		}
+
+		#region Encryption Demo
+		private static readonly string secretKey = "2ijds@#$erkjer33$rkr";
+
+		private static void HMACEncryption()
+		{
+			var apiKey = "ThisIsMyApplicationKey";
+			var now = DateTime.UtcNow;
+			
+			var secondsSinceEpoch = (int)Program.ConvertToEpochTime(now).TotalSeconds;
+			var expiresEpoch = (int)Program.ConvertToEpochTime(now.AddHours(1)).TotalSeconds;
+
+			var future = now.AddSeconds(5);
+			var futureSinceEpoch = (int)Program.ConvertToEpochTime(future).TotalSeconds;
+
+			System.Console.WriteLine("HMAC ...");
+			System.Console.WriteLine("UTC now: " + now);
+			System.Console.WriteLine("Seconds since unix epoch: " + secondsSinceEpoch);
+			System.Console.WriteLine("Expires unix epoch: " + expiresEpoch);
+			System.Console.WriteLine();
+			System.Console.WriteLine(Program.HMACEncrypt(apiKey, secretKey, now));
+			System.Console.WriteLine(Program.HMACEncrypt(apiKey, secretKey, now));
+			System.Console.WriteLine(Program.HMACEncrypt(apiKey, secretKey, future));
+			
+			System.Console.WriteLine();
+			System.Console.WriteLine("TripleDES ...");
+			var nowEncrypt = Program.TripleDESEncrypt(apiKey + "-" + secondsSinceEpoch);
+			var futureEncrypt = Program.TripleDESEncrypt(apiKey + "-" + futureSinceEpoch);
+			System.Console.WriteLine(nowEncrypt);
+			System.Console.WriteLine(futureEncrypt);
+			System.Console.WriteLine(Program.TripleDESDecrypt(nowEncrypt));
+			System.Console.WriteLine(Program.TripleDESDecrypt(futureEncrypt));
+		}
+
+		private static string TripleDESEncrypt(string value)
+		{
+			byte[] keyArray;
+			byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(value);
+
+			var md5 = new MD5CryptoServiceProvider();
+			keyArray = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(secretKey));
+			md5.Clear();
+
+			// Set the secret key for the tripleDES algorithm
+			var tripleDes = new TripleDESCryptoServiceProvider();
+			tripleDes.Key = keyArray;
+			tripleDes.Mode = CipherMode.ECB;
+			tripleDes.Padding = PaddingMode.PKCS7;
+
+			// Transform the specified region of bytes array to resultArray
+			var encryptor = tripleDes.CreateEncryptor();
+			byte[] resultArray = encryptor.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+			tripleDes.Clear();
+
+			return Convert.ToBase64String(resultArray);
+		}
+
+		private static string TripleDESDecrypt(string value)
+		{
+			//value = value.Replace(' ', '+');
+			byte[] keyArray;
+			byte[] toEncryptArray = Convert.FromBase64String(value);
+
+			MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+			keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(secretKey));
+			hashmd5.Clear();
+
+			// Set the secret key for the tripleDES algorithm
+			var tdes = new TripleDESCryptoServiceProvider();
+			tdes.Key = keyArray;
+			tdes.Mode = CipherMode.ECB;
+			tdes.Padding = PaddingMode.PKCS7;
+
+			ICryptoTransform cTransform = tdes.CreateDecryptor();
+			byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+			tdes.Clear();
+
+			return UTF8Encoding.UTF8.GetString(resultArray);
+		}
+
+		private static string HMACEncrypt(string value, string secret, DateTime date)
+		{
+			var secretBytes = Encoding.UTF8.GetBytes(secret);
+			var valueBytes = Encoding.UTF8.GetBytes(value);
+			string signature;
+			byte[] bytes = new byte[15];
+			_random.GetBytes(bytes);
+
+			using (var hmac = new HMACSHA256(secretBytes))
+			{
+				value = value + "-" + date.ToString();
+				var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(value));
+				signature = Convert.ToBase64String(hash);
+			}
+			return signature;
+		}
+
+		private static TimeSpan ConvertToEpochTime(DateTime utcTime)
+		{
+			return utcTime - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+		}
+		#endregion
 
 		#region Identity Demo
 		/// <summary>
