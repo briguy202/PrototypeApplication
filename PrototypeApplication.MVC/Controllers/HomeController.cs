@@ -21,5 +21,12 @@ namespace PrototypeApplication.MVC.Controllers
 		{
 			return View(ClaimsPrincipal.Current);
 		}
+
+		public ActionResult CookieCycle()
+		{
+			Response.SetCookie(new HttpCookie("test", "1"));
+			return View("CookieTest");
+		}
+
 	}
 }
