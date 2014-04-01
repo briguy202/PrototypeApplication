@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+	<script type="text/javascript">
+		document.domain = 'foo.com';
+	</script>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")</head>
 <body>
@@ -36,6 +39,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+	<script src="http://app2.foo.com/Scripts/CORSTest.js" type="text/javascript"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
 </body>
 </html>

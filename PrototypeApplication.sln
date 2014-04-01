@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypeApplication.MVC", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypeApplication.MVC.WSFed", "PrototypeApplication.MVC.WSFed\PrototypeApplication.MVC.WSFed.csproj", "{9778047B-25DC-4A13-BBB6-B57DDAFFFBC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypeApplication.EntityFrameworkConsole", "PrototypeApplication.EntityFrameworkConsole\PrototypeApplication.EntityFrameworkConsole.csproj", "{3F36A0E2-26C3-4233-B086-589023F58450}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9778047B-25DC-4A13-BBB6-B57DDAFFFBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9778047B-25DC-4A13-BBB6-B57DDAFFFBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9778047B-25DC-4A13-BBB6-B57DDAFFFBC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F36A0E2-26C3-4233-B086-589023F58450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F36A0E2-26C3-4233-B086-589023F58450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F36A0E2-26C3-4233-B086-589023F58450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F36A0E2-26C3-4233-B086-589023F58450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

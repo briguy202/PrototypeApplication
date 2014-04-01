@@ -9,14 +9,12 @@ namespace PrototypeApplication.MVC
 	{
 		public static void Register(HttpConfiguration config)
 		{
-			// Web API configuration and services
-			
-
-			config.Routes.MapHttpRoute(
-				name: "DefaultApi2",
-				routeTemplate: "api/{controller}/{action}",
-				defaults: new { action = "get", id = RouteParameter.Optional }
-			);
+			//// Web API configuration and services
+			//config.Routes.MapHttpRoute(
+			//	name: "DefaultApi2",
+			//	routeTemplate: "api/{controller}/{action}",
+			//	defaults: new { action = "get", id = RouteParameter.Optional }
+			//);
 
 			// Web API routes
 			config.MapHttpAttributeRoutes();

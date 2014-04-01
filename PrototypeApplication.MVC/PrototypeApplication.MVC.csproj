@@ -162,6 +162,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\CORSTest.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -185,6 +186,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Identity.cshtml" />
     <Content Include="Views\Home\CookieTest.cshtml" />
+    <Content Include="Views\Home\CORS.cshtml" />
+    <Content Include="Views\Home\Scrap.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

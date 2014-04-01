@@ -28,5 +28,16 @@ namespace PrototypeApplication.MVC.Controllers
 			return View("CookieTest");
 		}
 
+		public ActionResult CORS()
+		{
+			Response.SetCookie(new HttpCookie("test", "1"));
+
+			return View("CORS");
+		}
+
+		public ActionResult Scrap()
+		{
+			return View("Scrap");
+		}
 	}
 }
